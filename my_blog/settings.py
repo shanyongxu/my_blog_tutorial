@@ -39,8 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'article',
-]
+    #'django.contrib.sites',
+    #'disqus',
 
+]
+#DISQUS_API_KEY = 'lbVzDiqrhIdeTC1e3rygaLd2t8G6a4xyKkr4UGa84fH2TKm4XCu3r33l6dDayXfP'
+
+#DISQUS_WEBSITE_SHORTNAME = 'syx666.com'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,21 +1,56 @@
+<!--home.html-->
 {% extends "base.html" %}
+{%load custom_markdown%}
 {% block content %}
-<div class="posts"?
+<div class="posts">
     {% for post in post_list %}
-    <section class="post">
-        <header class="post-header">
-            <h2 class="post-title">{{post.title}}</h2>
+        <section class="post">
+            <header class="post-header">
+                <h2 class="post-title"><a href="{% url "detail" id=post.id %}">{{ post.title }}</a></h2>
 
-            <p class="post-meta">
-            Time:  <a class="post-author" href="#">{{ post.date_time  }}</a> <a class="post-category post-category-js" href="#">{{ post.category  }}</a>
-            </p>
-        </header>
+                    <p class="post-meta">
+                    Time:  <a class="post-author" href="#">{{ post.date_time |date:"Y /m /d"}}</a> <a class="post-category post-category-js" href="{% url 'search_tag' tag=post.category%}">{{ post.category }}</a>
+                    </p>
+            </header>
 
-        <div class="post-description">
-            <p>{{post.content}}</p>
-        </div>
-    </section>
+                <div class="post-description">
+                    <p>
+                        {{ post.content|custom_markdown|truncatewords:5 }}
+                    </p>
+                </div>
+                <a class="pure-button" href="{% url "detail" id=post.id %}">Read More >>> </a>
+        </section>
     {% endfor %}
-</div>
-{%endblock %}
 
+    {% if post_list.object_list and post_list.paginator.num_pages > 1%}
+    <div>
+
+        <ul class="pagination">     
+        {% if post_list.has_previous %}  
+            <li><a href="?page={{ post_list.previous_page_number }}" class="prev">{{ previous_link_decorator|safe }}上一页</a></li>  
+        {% else %}  
+            <li class="paginate_button previous disabled"><span class="disabled prev">{{ previous_link_decorator|safe }}上一页</span></li>  
+        {% endif %}  
+  
+  
+        {% for page in post_list.paginator.page_range %}  
+            {% if page %}  
+            {% ifequal page post_list.number %}  
+                <li class="active"><span class="current page">{{ page }}</span></li>  
+            {% else %}  
+                <li><a href="?page{{ page_suffix }}={{ page }}{{ getvars }}" class="page">{{ page }}</a></li>  
+            {% endifequal %}  
+           {% endif %}  
+        {% endfor %}  
+    
+        {% if post_list.has_next %}  
+            <li><a href="?page={{ post_list.next_page_number }}" class="next">下一页{{ next_link_decorator|safe }}</a></li>  
+{% else %}  
+            <li class="paginate_button next disabled"><span class="disabled next">下一页{{ next_link_decorator|safe }}</span></li>  
+        {% endif %}  
+</ul>  
+
+    </div>
+    {%endif%}
+</div><!-- /.blog-post -->
+{% endblock %}
