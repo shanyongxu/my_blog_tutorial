@@ -9,7 +9,11 @@ class Article(models.Model):
     category = models.CharField(max_length = 50, blank = True)
     date_time = models.DateTimeField(auto_now_add = True)
     content = models.TextField(blank = True, null = True)
+    views = models.PositiveIntegerField(default = 0) 
     
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
     def get_absolute_url(self):
         path = reverse('detail', kwargs={'id': self.id})
         return "syx666.com:8080%s" % path
